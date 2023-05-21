@@ -278,10 +278,11 @@
                 </form>
             </section>
         </div>
-        <div class="row"><br>
+        <div class="row align-items-center"><br>
             
             <h3 class="container-results p-2">Here are the Inventory Results</h3>
             <table id="books-input">
+                
                 <thead style="background-color: black; color: white">
                 <tr>
                     <th><label for="ID">ID:</label><br></th>
@@ -291,10 +292,10 @@
                     <th><label for="isbn">ISBN:</label><br></th>
                     <th><label for="cover">Cover:</label><br></th>
                     <th><label for="copyright">Copyright:</label><br></th>
-                    <th><label for="description">Description:</label><br></th>
+                    <th><label for="description" >Description:</label><br></th>
                     <th><label for="actions">Actions:</label><br></th>
                 </tr>
-                </thead
+            </thead>
                 {% for book in books %}
                 
                 <tr>
@@ -305,27 +306,20 @@
                     <td>{{ book.isbn }}</td>
                     <td>{{ book.cover }}</td>
                     <td>{{ book.copyright }}</td>
-                    <td>{{ book.description }}</td>
+                    <td><textarea type="text" rows="7" cols="50" >{{ book.description }}</textarea></td>
                    
-                     <td>   
-                        <!-- <span style="font-size: 20px; color: black">
-                            <a href="/{{book.isbn}}/update"><button><i class="fa-sharp fa-light fa-bars fa-edit"></i></button></a>
-                        </span> -->
-                        <!-- <form class="edit_delete" method="PUT" action="/{{book.isbn}}/update" style="justify-content: center; float: left" >
+                     <td class="align-items: center; justify-content: space-evenly; ">   
+                        
+                        <form action="{{ url_for('site.update', isbn = book.isbn ) }}" method="POST" style="align-items: center; justify-content: space-evenly; float: right; position: relative; left: -50%; margin: 2px" >
                             <input type="hidden" name="method" value="Update">
-                            
-                            <button type="submit" class="fa-sharp fa-light fa-pen-nib btn btn-warning text-dark update-button" name="update">
-                                Edit 
-                                <i class="fa-sharp fa-light fa-bars "></i>
-                                <i className="fa-light fa-bars " />
+                            <button type="submit" class="btn btn-warning text-dark update-button" name="update"><i class="fa-regular fa-md fa-pen-nib"></i>
                             </button>
-                        </form> -->
-                        <form method="POST" action="/{{book.isbn}}/delete" style="justify-content: center; float: right" >
+                        </form>
+                        <form method="POST" action="{{ url_for('site.delete', id = book.isbn ) }}" style="align-items: center; justify-content: space-evenly; float: left; position: relative; right: -50%; margin: 2px"  >
                             <input type="hidden" name="method" value="Delete">
-                            <button type="submit" class="btn btn-danger text-dark delete-button" name="delete">
-                                <!-- <i class="fa-duotone fa-trash"></i> -->
-                                Delete
+                            <button type="submit" class="btn btn-danger text-dark delete-button" name="delete"><i class="fa-regular fa-md fa-trash"></i>
                             </button>
+                            
                         </form>
                     </td>
                 </tr>

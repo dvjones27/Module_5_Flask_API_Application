@@ -22,13 +22,13 @@ class User(db.Model, UserMixin):
     id = db.Column(db.String, primary_key=True)
     first_name = db.Column(db.String(150), nullable=False, default='')
     last_name = db.Column(db.String(150), nullable = False, default = '')
-    username = db.Column(db.String(150), nullable = False, default = '')
+    username = db.Column(db.String(150), nullable = False)
     email = db.Column(db.String(150), nullable = False)
     password = db.Column(db.String, nullable = True, default = '')
     token = db.Column(db.String, default = '', unique = True )
     g_auth_verify = db.Column(db.Boolean, default = False)
     date_created = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
-    books = db.relationship('Book', backref = 'user', lazy = True)
+    # books = db.relationship('Book', backref = 'user', lazy = True)
     
     def __init__(self, first_name='', last_name='', username='', email='',   password='', token='', g_auth_verify=False):
         self.id = self.set_id()
@@ -61,13 +61,13 @@ class Book(db.Model):
     author = db.Column(db.String(150), nullable=False)
     length = db.Column(db.Integer())
     cover = db.Column(db.String(150))
-    copyright = db.Column(db.DateTime(timezone=False), )
-    description = db.Column(db.String(2500))
-    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
+    copyright = db.Column(db.DateTime(timezone=False))
+    description = db.Column(db.String(4500))
+    user_token = db.Column(db.String, db.ForeignKey('user.token'), nullable=False)
     date_created = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
     
     
-    def __init__(self, isbn, title, author, length, cover, copyright, description, user_id):
+    def __init__(self, isbn, title, author, length, cover, copyright, description, user_token):
         self.isbn = isbn
         self.title = title
         self.author = author
@@ -75,7 +75,7 @@ class Book(db.Model):
         self.cover = cover
         self.copyright = copyright
         self.description = description
-        self.user_id = user_id
+        self.user_token = user_token
     
     def __repr__(self):
         return f'The book {self.title} by {self.author} having a copyright date of {self.copyright} was created.'
@@ -83,7 +83,7 @@ class Book(db.Model):
     
 class BookSchema(ma.Schema):
     class Meta:
-        fields = ['isbn', 'title', 'author', 'length', 'cover', 'copyright', 'description',  'user_id']
+        fields = ['isbn', 'title', 'author', 'length', 'cover', 'copyright', 'description']
 
 book_schema = BookSchema()
 books_schema = BookSchema(many=True)

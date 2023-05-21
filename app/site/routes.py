@@ -30,9 +30,9 @@ def create_book():
     cover = request.form['cover']
     copyright = request.form['copyright']
     description = request.form['description']
-    user_id = current_user.id
+    user_token = current_user.token
     
-    book = Book(isbn, title, author, length, cover, copyright, description, user_id=user_id)
+    book = Book(isbn, title, author, length, cover, copyright, description, user_token = user_token)
     
     db.session.add(book)
     db.session.commit()
@@ -107,7 +107,7 @@ def search():
 #     return redirect(url_for('site.update', book = book))
 
 
-@site.route('/<string:isbn>/update', methods=[ 'GET','POST','PUT'])
+@site.route('/update/<string:isbn>', methods=[ 'GET','POST'])
 @login_required
 def update(isbn):
     # i = Book.query.get_or_404(id)
@@ -187,18 +187,14 @@ def retrieveBookList():
 
 
 
-@site.route('/<int:id>/delete', methods=['GET','POST'])
+@site.route('/delete/<id>', methods=['GET','POST'])
 def delete(id):
-    user_id = current_user.id
-    books = Book.query.filter_by(user_id=user_id).first()
-    
+    books = Book.query.get(id)
     if request.method == 'POST':
         if books:
             db.session.delete(books)
             db.session.commit()
             return redirect(url_for('site.books'))
         abort(404)
-    return render_template('delete.html')
+    return render_template('site.books')
     
-    # return redirect('/books')
-    # return redirect(url_for('site.books'))

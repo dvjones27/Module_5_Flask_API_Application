@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 7d714e1e50ca
+Revision ID: 25a42da13fba
 Revises: 
-Create Date: 2023-04-09 17:00:34.896154
+Create Date: 2023-05-12 14:28:53.262608
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7d714e1e50ca'
+revision = '25a42da13fba'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,17 +32,18 @@ def upgrade():
     sa.UniqueConstraint('token')
     )
     op.create_table('book',
+    sa.Column('id', sa.String(), nullable=False),
     sa.Column('isbn', sa.String(length=15), nullable=False),
     sa.Column('title', sa.String(length=150), nullable=False),
     sa.Column('author', sa.String(length=150), nullable=False),
     sa.Column('length', sa.Integer(), nullable=True),
     sa.Column('cover', sa.String(length=150), nullable=True),
     sa.Column('copyright', sa.DateTime(), nullable=True),
-    sa.Column('description', sa.String(length=2500), nullable=True),
-    sa.Column('user_id', sa.String(), nullable=False),
+    sa.Column('description', sa.String(length=4500), nullable=True),
+    sa.Column('user_token', sa.String(), nullable=False),
     sa.Column('date_created', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('isbn')
+    sa.ForeignKeyConstraint(['user_token'], ['user.token'], ),
+    sa.PrimaryKeyConstraint('id', 'isbn')
     )
     # ### end Alembic commands ###
 
